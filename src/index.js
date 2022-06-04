@@ -16,8 +16,6 @@ form.addEventListener('submit', (e) => {
     let value = e.currentTarget.elements.searchQuery.value;
     console.log(value);
   getUser(value);
-
-
 })
 
 
