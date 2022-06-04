@@ -1,5 +1,4 @@
-
-import './sass/main.scss';
+import './css/styles.css';
 import Notiflix from 'notiflix';
 const axios = require('axios');
 
@@ -12,14 +11,12 @@ const MY_API_KEY = '27831514-d30de37ffbcb7c53880408e02';
 
 
 form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  gallery.innerHTML = '';
     let value = e.currentTarget.elements.searchQuery.value;
     console.log(value);
   getUser(value);
 })
-
-
-
 async function getUser(q) {
   try {
  
@@ -34,10 +31,6 @@ async function getUser(q) {
     console.error(error);
   }
 }
-
-function renderCard(params) {
-  
-}
 function makeListCountries(data) {
    const markup = makeHtmlListCard(data);
    gallery.insertAdjacentHTML('beforeend', markup); 
@@ -46,19 +39,25 @@ function makeHtmlListCard(data){
  return data.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
         `
 <div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+<div class="img-container"> 
+  <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+</div>
   <div class="info">
     <p class="info-item">
-      <b>${likes}</b>
+       <b class="text property" >Likes</b>
+      <b class="text value">${likes}</b>
     </p>
     <p class="info-item">
-      <b>${views}</b>
+         <b class="text property">Views</b>
+      <b class="text value">${views}</b>
     </p>
     <p class="info-item">
-      <b>${comments}</b>
+        <b class="text property">Comments</b>
+      <b class="text value">${comments}</b>
     </p>
     <p class="info-item">
-      <b>${downloads}</b>
+      <b class="text property">Downloads</b>
+      <b class="text value">${downloads}</b>
     </p>
   </div>
 </div>
