@@ -6,27 +6,32 @@ const axios = require('axios');
 
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form')
+const loadMore = document.querySelector('.load-more')
 
 const MY_API_KEY = '27831514-d30de37ffbcb7c53880408e02';  
-
+let pageforBtn = 1;
+let valueInput = '';
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   gallery.innerHTML = '';
-    let value = e.currentTarget.elements.searchQuery.value;
-    console.log(value);
-  getUser(value);
+  valueInput = e.currentTarget.elements.searchQuery.value;
+  pageforBtn = 1;
+    // console.log(value);
+  getUser(valueInput );
 })
+
 async function getUser(q) {
   try {
  
-    const response = await axios.get(`https://pixabay.com/api/?key=${MY_API_KEY}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true`);
+    const response = await axios.get(`https://pixabay.com/api/?key=${MY_API_KEY}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageforBtn}`);
     if (response.data.hits.length === 0) {
          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
     let arr = response.data.hits;
     console.log(response.data.hits);
     makeListCountries(arr);
+    pageforBtn += 1;
   } catch (error) {
     console.error(error);
   }
@@ -64,3 +69,7 @@ function makeHtmlListCard(data){
         `
       ).join(""); 
 }
+
+loadMore.addEventListener('click', () => {
+    getUser(valueInput );
+ })
