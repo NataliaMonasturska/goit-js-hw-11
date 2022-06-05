@@ -11,20 +11,22 @@ const loadMore = document.querySelector('.load-more')
 const MY_API_KEY = '27831514-d30de37ffbcb7c53880408e02';  
 let pageforBtn = 1;
 let valueInput = '';
-loadMore.classList.add('visually-hidden')
+
+
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   gallery.innerHTML = '';
   valueInput = e.currentTarget.elements.searchQuery.value;
   pageforBtn = 1;
-    // console.log(value);
+    
   if (!loadMore.classList.contains('visually-hidden')) {
       loadMore.classList.add('visually-hidden')
   }
+
  getUser(valueInput);
+
  
-  loadMore.classList.remove('visually-hidden')
 })
 
 async function getUser(q) {
@@ -35,9 +37,13 @@ async function getUser(q) {
          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
     let arr = response.data.hits;
+    console.log(response.data.total);
     console.log(response.data.hits);
     makeListCountries(arr);
     pageforBtn += 1;
+    if (response.data.total > 40) {
+       loadMore.classList.remove('visually-hidden')
+    }
   } catch (error) {
     console.error(error);
   }
