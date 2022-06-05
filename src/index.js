@@ -5,9 +5,6 @@ import Notiflix from 'notiflix';
 const axios = require('axios');
 
 
-
-
-
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form')
 const loadMore = document.querySelector('.load-more')
@@ -18,17 +15,14 @@ let pageforBtn = 1;
 let valueInput = '';
 let totalHitsValue = '';
 
-//  const lightbox = new SimpleLightbox('.gallery a', {
-//     captionsData: 'alt',
-//     captionDelay: 250,
-//     close: false,
-//    });
 
-// let lightbox = new SimpleLightbox('.gallery a');
-//  lightbox.on('show.simplelightbox', function () { });
+form.addEventListener('submit', onSubmit);
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+loadMore.addEventListener('click', onClick);
+
+
+function onSubmit(e) {
+    e.preventDefault();
   gallery.innerHTML = '';
   valueInput = e.currentTarget.elements.searchQuery.value;
   pageforBtn = 1;
@@ -40,13 +34,8 @@ form.addEventListener('submit', (e) => {
     if (totalHitsValue > 0) {
         Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
     }
-  
   })
-  //  lightbox.refresh();
-  } 
-
-)
-
+}
 
 async function getUser(q) {
   try {
@@ -57,17 +46,10 @@ async function getUser(q) {
     let arr = response.data.hits;
     let lastPage = Math.ceil(response.data.totalHits / 40) 
     totalHitsValue = response.data.totalHits;
-    console.log(lastPage);
-    console.log(pageforBtn);
-    // console.log(response.data.total);
-    // console.log(response.data.hits);
-    console.log(response.data.totalHits);
     makeListCountries(arr);
   
-   
     if (response.data.total > 40) {
       loadMore.classList.remove('visually-hidden');
-    
     }
     if (pageforBtn === lastPage) {
        if (!loadMore.classList.contains('visually-hidden')) {
@@ -75,14 +57,10 @@ async function getUser(q) {
        }
      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
-    
-    //  pageforBtn += 1;
   } catch (error) {
     console.error(error);
   }
 }
-
-
 
 function makeListCountries(data) {
    const markup = makeHtmlListCard(data);
@@ -95,11 +73,11 @@ function makeListCountries(data) {
    });
     lightbox.refresh();
 }
+
 function makeHtmlListCard(data){
  return data.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
-  `
-<div class="photo-card">
-<a href="${largeImageURL}"> 
+  `<div class="photo-card">
+  <a href="${largeImageURL}"> 
   <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
   </a>
   <div class="info">
@@ -120,19 +98,15 @@ function makeHtmlListCard(data){
       <b class="text value">${downloads}</b>
     </p>
   </div>
-</div>
-  
-        `
-      ).join(""); 
+</div>`).join(""); 
 }
 
-loadMore.addEventListener('click', (e) => {
-    e.preventDefault();
+function onClick(e) {
+   e.preventDefault();
   getUser(valueInput).then(ref => {
-    // lightbox.refresh();
      pageforBtn += 1;
   }
-
   )
-  
-})
+}
+
+
