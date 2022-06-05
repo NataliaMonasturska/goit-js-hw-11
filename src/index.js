@@ -11,6 +11,7 @@ const loadMore = document.querySelector('.load-more')
 const MY_API_KEY = '27831514-d30de37ffbcb7c53880408e02';  
 let pageforBtn = 1;
 let valueInput = '';
+loadMore.classList.add('visually-hidden')
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -18,7 +19,12 @@ form.addEventListener('submit', (e) => {
   valueInput = e.currentTarget.elements.searchQuery.value;
   pageforBtn = 1;
     // console.log(value);
-  getUser(valueInput );
+  if (!loadMore.classList.contains('visually-hidden')) {
+      loadMore.classList.add('visually-hidden')
+  }
+ getUser(valueInput);
+ 
+  loadMore.classList.remove('visually-hidden')
 })
 
 async function getUser(q) {
