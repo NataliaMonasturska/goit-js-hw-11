@@ -18,6 +18,8 @@ let pageforBtn = 1;
 let valueInput = '';
 let totalHitsValue = '';
 
+let lightbox = new SimpleLightbox('.gallery a');
+ lightbox.on('show.simplelightbox', function () { });
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -31,6 +33,7 @@ form.addEventListener('submit', (e) => {
   getUser(valueInput).then(() => {
     Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
   })
+   lightbox.refresh();
   } 
 
 )
@@ -78,8 +81,7 @@ function makeHtmlListCard(data){
   `
 <div class="photo-card">
 <div class="img-container">
-<a 
-  href="${largeImageURL}"> 
+<a href="${largeImageURL}"> 
   <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
   </a>
 
@@ -108,8 +110,12 @@ function makeHtmlListCard(data){
       ).join(""); 
 }
 
-loadMore.addEventListener('click', () => {
-    getUser(valueInput );
+loadMore.addEventListener('click', (e) => {
+    e.preventDefault();
+  getUser(valueInput).then(ref => {
+    lightbox.refresh();
+  }
+
+  )
+  
 })
-let lightbox = new SimpleLightbox('.gallery a');
- lightbox.on('show.simplelightbox', function () {});
