@@ -1,6 +1,8 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
 const axios = require('axios');
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 
@@ -8,10 +10,11 @@ const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form')
 const loadMore = document.querySelector('.load-more')
 
+
 const MY_API_KEY = '27831514-d30de37ffbcb7c53880408e02';  
 let pageforBtn = 1;
 let valueInput = '';
-
+let totalHitsValue = '';
 
 
 form.addEventListener('submit', (e) => {
@@ -21,13 +24,14 @@ form.addEventListener('submit', (e) => {
   pageforBtn = 1;
     
   if (!loadMore.classList.contains('visually-hidden')) {
-      loadMore.classList.add('visually-hidden')
+    loadMore.classList.add('visually-hidden')
   }
+  getUser(valueInput).then(() => {
+    Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
+  })
+  } 
 
- getUser(valueInput);
-
- 
-})
+)
 
 async function getUser(q) {
   try {
@@ -37,13 +41,28 @@ async function getUser(q) {
          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
     let arr = response.data.hits;
-    console.log(response.data.total);
-    console.log(response.data.hits);
+    let lastPage = Math.ceil(response.data.totalHits / 40) 
+    totalHitsValue = response.data.totalHits;
+    console.log(lastPage);
+    console.log(pageforBtn);
+    // console.log(response.data.total);
+    // console.log(response.data.hits);
+    console.log(response.data.totalHits);
     makeListCountries(arr);
-    pageforBtn += 1;
+  
+   
     if (response.data.total > 40) {
-       loadMore.classList.remove('visually-hidden')
+      loadMore.classList.remove('visually-hidden');
+    
     }
+    if (pageforBtn === lastPage) {
+       if (!loadMore.classList.contains('visually-hidden')) {
+       loadMore.classList.add('visually-hidden')
+       }
+     Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+    }
+    
+     pageforBtn += 1;
   } catch (error) {
     console.error(error);
   }
