@@ -18,8 +18,14 @@ let pageforBtn = 1;
 let valueInput = '';
 let totalHitsValue = '';
 
-let lightbox = new SimpleLightbox('.gallery a');
- lightbox.on('show.simplelightbox', function () { });
+//  const lightbox = new SimpleLightbox('.gallery a', {
+//     captionsData: 'alt',
+//     captionDelay: 250,
+//     close: false,
+//    });
+
+// let lightbox = new SimpleLightbox('.gallery a');
+//  lightbox.on('show.simplelightbox', function () { });
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -31,16 +37,19 @@ form.addEventListener('submit', (e) => {
     loadMore.classList.add('visually-hidden')
   }
   getUser(valueInput).then(() => {
-    Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
+    if (totalHitsValue > 0) {
+        Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
+    }
+  
   })
-   lightbox.refresh();
+  //  lightbox.refresh();
   } 
 
 )
 
+
 async function getUser(q) {
   try {
- 
     const response = await axios.get(`https://pixabay.com/api/?key=${MY_API_KEY}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageforBtn}`);
     if (response.data.hits.length === 0) {
          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
@@ -67,25 +76,32 @@ async function getUser(q) {
      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
     
-     pageforBtn += 1;
+    //  pageforBtn += 1;
   } catch (error) {
     console.error(error);
   }
 }
+
+
+
 function makeListCountries(data) {
    const markup = makeHtmlListCard(data);
-   gallery.insertAdjacentHTML('beforeend', markup); 
+  gallery.insertAdjacentHTML('beforeend', markup); 
+
+   const lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+    close: false,
+   });
+    lightbox.refresh();
 }
 function makeHtmlListCard(data){
  return data.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
   `
 <div class="photo-card">
-<div class="img-container">
 <a href="${largeImageURL}"> 
   <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
   </a>
-
-</div>
   <div class="info">
     <p class="info-item">
        <b class="text property" >Likes</b>
@@ -113,7 +129,8 @@ function makeHtmlListCard(data){
 loadMore.addEventListener('click', (e) => {
     e.preventDefault();
   getUser(valueInput).then(ref => {
-    lightbox.refresh();
+    // lightbox.refresh();
+     pageforBtn += 1;
   }
 
   )
