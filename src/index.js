@@ -1,8 +1,10 @@
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 import './css/styles.css';
 import Notiflix from 'notiflix';
 const axios = require('axios');
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+
+
 
 
 
@@ -73,10 +75,14 @@ function makeListCountries(data) {
 }
 function makeHtmlListCard(data){
  return data.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
-        `
+  `
 <div class="photo-card">
-<div class="img-container"> 
+<div class="img-container">
+<a 
+  href="${largeImageURL}"> 
   <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+  </a>
+
 </div>
   <div class="info">
     <p class="info-item">
@@ -97,10 +103,13 @@ function makeHtmlListCard(data){
     </p>
   </div>
 </div>
+  
         `
       ).join(""); 
 }
 
 loadMore.addEventListener('click', () => {
     getUser(valueInput );
- })
+})
+let lightbox = new SimpleLightbox('.gallery a');
+ lightbox.on('show.simplelightbox', function () {});
