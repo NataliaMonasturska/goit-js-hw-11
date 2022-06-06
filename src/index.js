@@ -21,19 +21,19 @@ form.addEventListener('submit', onSubmit);
 loadMore.addEventListener('click', onClick);
 
 
-function onSubmit(e) {
+function onSubmit(e){
     e.preventDefault();
   gallery.innerHTML = '';
   valueInput = e.currentTarget.elements.searchQuery.value.trim();
     if (!loadMore.classList.contains('visually-hidden')) {
-    loadMore.classList.add('visually-hidden')
+      loadMore.classList.add('visually-hidden');
   }
   if (valueInput === "") {
-     Notiflix.Notify.failure("Enter a query");
+    Notiflix.Notify.failure("Enter a query");
   }
   else {
-      pageforBtn = 1;
-    
+    pageforBtn = 1;
+  } 
 
   getUser(valueInput).then(() => {
     if (totalHitsValue > 0) {
@@ -42,8 +42,6 @@ function onSubmit(e) {
     pageforBtn += 1;
   })
   }
-
-}
 
 async function getUser(q) {
   try {
@@ -55,7 +53,6 @@ async function getUser(q) {
     let lastPage = Math.ceil(response.data.totalHits / 40);
     totalHitsValue = response.data.totalHits;
 
- 
     makeListCountries(arr);
   
     if (response.data.total > 40) {
@@ -118,9 +115,18 @@ function onClick(e) {
    e.preventDefault();
   getUser(valueInput)
     .then(() => {
-     pageforBtn += 1;
+      pageforBtn += 1;
+      
+      const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+      window.scrollBy({
+      top: cardHeight * 2,
+      behavior: "smooth",
+});
   }
   )
 }
+
+
+
 
 
