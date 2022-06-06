@@ -24,18 +24,25 @@ loadMore.addEventListener('click', onClick);
 function onSubmit(e) {
     e.preventDefault();
   gallery.innerHTML = '';
-  valueInput = e.currentTarget.elements.searchQuery.value;
-  pageforBtn = 1;
-    
-  if (!loadMore.classList.contains('visually-hidden')) {
+  valueInput = e.currentTarget.elements.searchQuery.value.trim();
+    if (!loadMore.classList.contains('visually-hidden')) {
     loadMore.classList.add('visually-hidden')
   }
+  if (valueInput === "") {
+     Notiflix.Notify.failure("Enter a query");
+  }
+  else {
+      pageforBtn = 1;
+    
+
   getUser(valueInput).then(() => {
     if (totalHitsValue > 0) {
         Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
     }
     pageforBtn += 1;
   })
+  }
+
 }
 
 async function getUser(q) {
@@ -47,6 +54,7 @@ async function getUser(q) {
     let arr = response.data.hits;
     let lastPage = Math.ceil(response.data.totalHits / 40);
     totalHitsValue = response.data.totalHits;
+
  
     makeListCountries(arr);
   
@@ -57,7 +65,10 @@ async function getUser(q) {
        if (!loadMore.classList.contains('visually-hidden')) {
        loadMore.classList.add('visually-hidden')
        }
-     Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+    if (response.data.total <= 40) {
+        return
+    }
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
   } catch (error) {
     console.error(error);
