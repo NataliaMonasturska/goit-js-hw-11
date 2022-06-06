@@ -34,6 +34,7 @@ function onSubmit(e) {
     if (totalHitsValue > 0) {
         Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
     }
+    pageforBtn += 1;
   })
 }
 
@@ -44,9 +45,12 @@ async function getUser(q) {
          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
     let arr = response.data.hits;
-    let lastPage = Math.ceil(response.data.totalHits / 40) 
+    let lastPage = Math.ceil(response.data.totalHits / 40);
     totalHitsValue = response.data.totalHits;
+    console.log(totalHitsValue);
+    console.log(pageforBtn);
     makeListCountries(arr);
+    // pageforBtn += 1;
   
     if (response.data.total > 40) {
       loadMore.classList.remove('visually-hidden');
@@ -103,7 +107,8 @@ function makeHtmlListCard(data){
 
 function onClick(e) {
    e.preventDefault();
-  getUser(valueInput).then(ref => {
+  getUser(valueInput)
+    .then(ref => {
      pageforBtn += 1;
   }
   )
