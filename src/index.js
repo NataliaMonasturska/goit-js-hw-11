@@ -50,7 +50,6 @@ async function getUser(q) {
     console.log(totalHitsValue);
     console.log(pageforBtn);
     makeListCountries(arr);
-    // pageforBtn += 1;
   
     if (response.data.total > 40) {
       loadMore.classList.remove('visually-hidden');
