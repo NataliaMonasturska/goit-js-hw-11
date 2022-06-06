@@ -47,8 +47,7 @@ async function getUser(q) {
     let arr = response.data.hits;
     let lastPage = Math.ceil(response.data.totalHits / 40);
     totalHitsValue = response.data.totalHits;
-    console.log(totalHitsValue);
-    console.log(pageforBtn);
+ 
     makeListCountries(arr);
   
     if (response.data.total > 40) {
@@ -107,7 +106,7 @@ function makeHtmlListCard(data){
 function onClick(e) {
    e.preventDefault();
   getUser(valueInput)
-    .then(ref => {
+    .then(() => {
      pageforBtn += 1;
   }
   )
