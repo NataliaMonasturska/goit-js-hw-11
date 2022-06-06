@@ -3,18 +3,29 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import './css/styles.css';
 import Notiflix from 'notiflix';
 const axios = require('axios');
+import OnlyScroll from 'only-scrollbar';
 
 
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form')
 const loadMore = document.querySelector('.load-more')
-
+const input = document.querySelector('input')
 
 const MY_API_KEY = '27831514-d30de37ffbcb7c53880408e02';  
 let pageforBtn = 1;
 let valueInput = '';
 let totalHitsValue = '';
 
+const lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+    close: false,
+   });
+
+const scroll = new OnlyScroll(document.scrollingElement, {
+    damping: 0.8,
+    eventContainer: window
+});
 
 form.addEventListener('submit', onSubmit);
 
@@ -33,14 +44,16 @@ function onSubmit(e){
   }
   else {
     pageforBtn = 1;
-  } 
-
+    
   getUser(valueInput).then(() => {
     if (totalHitsValue > 0) {
         Notiflix.Notify.success(`Hooray! We found ${totalHitsValue} images.`)
     }
     pageforBtn += 1;
+    lightbox.refresh();
+   input.value = "";
   })
+  } 
   }
 
 async function getUser(q) {
@@ -75,13 +88,6 @@ async function getUser(q) {
 function makeListCountries(data) {
    const markup = makeHtmlListCard(data);
   gallery.insertAdjacentHTML('beforeend', markup); 
-
-   const lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-    close: false,
-   });
-    lightbox.refresh();
 }
 
 function makeHtmlListCard(data){
@@ -116,7 +122,7 @@ function onClick(e) {
   getUser(valueInput)
     .then(() => {
       pageforBtn += 1;
-      
+      lightbox.refresh();
       const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
       window.scrollBy({
       top: cardHeight * 2,
@@ -127,6 +133,4 @@ function onClick(e) {
 }
 
 
-
-
-
+ 
