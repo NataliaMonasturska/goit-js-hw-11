@@ -15,9 +15,7 @@ body {
      object-fit: cover;
  }
 
-input{
-    height: 30px;
-}
+
 
 .header{
     background-color: #6A5ACD;
@@ -33,9 +31,7 @@ input{
  
 }
 
-.submit{
-    height: 30px;
-}
+
 
 .gallery{
     padding-left: 40px;
@@ -125,4 +121,38 @@ input{
 
 .load-more:hover{
 background-color: #5947c7;
+}
+/* кастомный поисковик */
+form {
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+}
+input {
+    top: 10px;
+    width: 100%;
+    height: 42px;
+    padding-left: 10px;
+    border: 2px solid #dcdcdc;
+    border-radius: 5px;
+    outline: none;
+    background: white;
+    color: #9E9C9C;
+}
+.submit {
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    background:#dcdcdc;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+.submit:before {
+    content: "\f002";
+    font-family: FontAwesome;
+    font-size: 16px;
+    color: #5947c7;
 }
